@@ -1,0 +1,28 @@
+body {
+  font-family: Arial;
+  padding: 20px;
+}
+
+input, button {
+  padding: 8px;
+  margin: 5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td, th {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.red {
+  background-color: #ffcccc;
+}
+
+.green {
+  background-color: #ccffcc;
+}

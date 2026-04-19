@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Library Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>📚 Library Management System</h1>
+
+<h2>New Admission</h2>
+<input type="text" id="name" placeholder="Aspirant Name">
+<input type="date" id="joinDate">
+<button onclick="addUser()">Add</button>
+
+<h2>Aspirants List</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Join Date</th>
+      <th>Days Left</th>
+      <th>Status</th>
+      <th>Attendance</th>
+    </tr>
+  </thead>
+  <tbody id="list"></tbody>
+</table>
+
+<script src="script.js"></script>
+
+</body>
+</html>
