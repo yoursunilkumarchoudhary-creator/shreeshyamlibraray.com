@@ -1,28 +1,67 @@
 body {
   font-family: Arial;
-  padding: 20px;
-}
-
-input, button {
-  padding: 8px;
-  margin: 5px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-td, th {
-  border: 1px solid #ccc;
-  padding: 10px;
+  background: linear-gradient(to right, #667eea, #764ba2);
+  color: white;
   text-align: center;
 }
 
-.red {
-  background-color: #ffcccc;
+h1 {
+  margin-top: 20px;
 }
 
-.green {
-  background-color: #ccffcc;
+.form {
+  margin: 20px;
+}
+
+input {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  border: none;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  background: #00c9a7;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #00a38a;
+}
+
+table {
+  width: 90%;
+  margin: auto;
+  background: white;
+  color: black;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th {
+  background: #333;
+  color: white;
+  padding: 10px;
+}
+
+td {
+  padding: 10px;
+}
+
+.present {
+  background: green;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.absent {
+  background: red;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
 }

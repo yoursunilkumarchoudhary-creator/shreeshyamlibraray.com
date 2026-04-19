@@ -1,72 +1,73 @@
-let users = [];
+let students = JSON.parse(localStorage.getItem("students")) || [];
 
-function addUser() {
+function saveData() {
+  localStorage.setItem("students", JSON.stringify(students));
+}
+
+function addStudent() {
   let name = document.getElementById("name").value;
-  let joinDate = document.getElementById("joinDate").value;
+  let contact = document.getElementById("contact").value;
+  let date = document.getElementById("date").value;
 
-  if (!name || !joinDate) {
+  if (!name || !contact || !date) {
     alert("Fill all fields");
     return;
   }
 
-  users.push({
+  students.push({
     name,
-    joinDate,
-    attendance: []
+    contact,
+    date,
+    attendance: "Not Marked"
   });
 
-  display();
-}
-
-function getDaysLeft(joinDate) {
-  let join = new Date(joinDate);
-  let now = new Date();
-
-  let nextMonth = new Date(join);
-  nextMonth.setMonth(join.getMonth() + 1);
-
-  let diff = Math.ceil((nextMonth - now) / (1000 * 60 * 60 * 24));
-  return diff;
+  saveData();
+  displayStudents();
 }
 
 function markAttendance(index) {
-  let today = new Date().toDateString();
+  let status = students[index].attendance;
 
-  if (!users[index].attendance.includes(today)) {
-    users[index].attendance.push(today);
-    display();
+  if (status === "Present") {
+    students[index].attendance = "Absent";
+  } else {
+    students[index].attendance = "Present";
   }
+
+  saveData();
+  displayStudents();
 }
 
-function display() {
-  let list = document.getElementById("list");
-  list.innerHTML = "";
+function calculateDaysLeft(joinDate) {
+  let join = new Date(joinDate);
+  let today = new Date();
+  let diff = Math.floor((today - join) / (1000 * 60 * 60 * 24));
+  return 30 - diff;
+}
 
-  users.forEach((u, i) => {
-    let daysLeft = getDaysLeft(u.joinDate);
+function displayStudents() {
+  let table = document.getElementById("tableBody");
+  table.innerHTML = "";
 
-    let status = "";
-    let className = "";
+  students.forEach((s, index) => {
+    let daysLeft = calculateDaysLeft(s.date);
 
-    if (daysLeft <= 3) {
-      status = "Fee Due";
-      className = "red";
-    } else {
-      status = "Active";
-      className = "green";
-    }
-
-    list.innerHTML += `
-      <tr class="${className}">
-        <td>${u.name}</td>
-        <td>${u.joinDate}</td>
+    table.innerHTML += `
+      <tr>
+        <td>${s.name}</td>
+        <td>${s.contact}</td>
+        <td>${s.date}</td>
         <td>${daysLeft}</td>
-        <td>${status}</td>
+        <td>${daysLeft > 0 ? "Active" : "Expired"}</td>
         <td>
-          <button onclick="markAttendance(${i})">Mark</button>
-          (${u.attendance.length})
+          <button onclick="markAttendance(${index})">Mark</button>
+          <div class="${s.attendance === 'Present' ? 'present' : 'absent'}">
+            ${s.attendance}
+          </div>
         </td>
       </tr>
     `;
   });
 }
+
+displayStudents();
