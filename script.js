@@ -23,6 +23,16 @@ function addStudent() {
 
   saveData();
   displayStudents();
+
+  document.getElementById("name").value = "";
+  document.getElementById("contact").value = "";
+  document.getElementById("date").value = "";
+}
+
+function deleteStudent(index) {
+  students.splice(index, 1);
+  saveData();
+  displayStudents();
 }
 
 function markAttendance(index) {
@@ -42,7 +52,7 @@ function calculateDaysLeft(joinDate) {
   let join = new Date(joinDate);
   let today = new Date();
   let diff = Math.floor((today - join) / (1000 * 60 * 60 * 24));
-  return 30 - diff;
+  return Math.max(0, 30 - diff);
 }
 
 function displayStudents() {
@@ -61,9 +71,12 @@ function displayStudents() {
         <td>${daysLeft > 0 ? "Active" : "Expired"}</td>
         <td>
           <button onclick="markAttendance(${index})">Mark</button>
-          <div class="${s.attendance === 'Present' ? 'present' : 'absent'}">
+          <div class="${s.attendance === 'Present' ? 'present' : s.attendance === 'Absent' ? 'absent' : ''}">
             ${s.attendance}
           </div>
+        </td>
+        <td>
+          <button onclick="deleteStudent(${index})">Delete</button>
         </td>
       </tr>
     `;

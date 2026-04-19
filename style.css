@@ -5,8 +5,14 @@ body {
   text-align: center;
 }
 
-h1 {
+.logo {
   margin-top: 20px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+h2 {
+  margin-top: 10px;
 }
 
 .form {
