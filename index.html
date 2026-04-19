@@ -2,99 +2,38 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Library Members</title>
+<title>Library System Pro</title>
 <style>
-body {
-    font-family: Arial;
-    background: #f4f6f9;
-}
-
-header {
-    background: linear-gradient(to right, #3a7bd5, #3a6073);
-    color: white;
-    padding: 15px;
-    font-size: 24px;
-}
-
-.container {
-    width: 90%;
-    margin: auto;
-    margin-top: 20px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-input, select {
-    padding: 8px;
-    margin: 5px;
-}
-
-button {
-    padding: 8px 15px;
-    background: #3a7bd5;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-th {
-    background: #3a7bd5;
-    color: white;
-    padding: 10px;
-}
-
-td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
-}
-
-.paid {
-    color: green;
-    font-weight: bold;
-}
-
-.unpaid {
-    color: red;
-    font-weight: bold;
-}
-
-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-}
+body {font-family: Arial; background:#eef2f7;}
+header {background:#2c3e50;color:white;padding:15px;font-size:22px;}
+.container {width:95%;margin:auto;margin-top:20px;background:white;padding:20px;border-radius:10px;}
+input,select{padding:6px;margin:4px;}
+button{padding:6px 12px;background:#2c3e50;color:white;border:none;border-radius:5px;}
+table{width:100%;margin-top:15px;border-collapse:collapse;}
+th{background:#2c3e50;color:white;padding:8px;}
+td{padding:8px;border-bottom:1px solid #ccc;text-align:center;}
+img{width:40px;height:40px;border-radius:50%;}
+.red{color:red;font-weight:bold;}
+.green{color:green;font-weight:bold;}
 </style>
 </head>
-
 <body>
 
-<header>📚 Library Members</header>
+<header>📚 Library System (Database Version)</header>
 
 <div class="container">
-
 <h3>Add Student</h3>
 
 <input type="text" id="name" placeholder="Name">
-<input type="text" id="phone" placeholder="Phone Number">
-<input type="text" id="sheet" placeholder="Sheet No.">
+<input type="text" id="phone" placeholder="Phone">
+<input type="text" id="sheet" placeholder="Sheet No">
+
+<input type="date" id="startDate">
+<input type="number" id="days" placeholder="Plan Days">
 
 <select id="fees">
-<option value="Paid">Paid</option>
-<option value="Unpaid">Unpaid</option>
-</select>
-
-<select id="membership">
-<option value="Premium">Premium</option>
-<option value="Standard">Standard</option>
+<option>Paid</option>
+<option>Unpaid</option>
 </select>
 
 <input type="file" id="photo">
@@ -104,55 +43,80 @@ img {
 <table>
 <thead>
 <tr>
-<th>Photo</th>
-<th>Name</th>
-<th>Phone</th>
-<th>Sheet</th>
-<th>Fees</th>
-<th>Membership</th>
+<th>Photo</th><th>Name</th><th>Phone</th><th>Sheet</th>
+<th>Fees</th><th>Start</th><th>Days Left</th><th>Action</th>
 </tr>
 </thead>
-
-<tbody id="tableData"></tbody>
-
+<tbody id="data"></tbody>
 </table>
-
 </div>
 
 <script>
-function addStudent() {
-    let name = document.getElementById("name").value;
-    let phone = document.getElementById("phone").value;
-    let sheet = document.getElementById("sheet").value;
-    let fees = document.getElementById("fees").value;
-    let membership = document.getElementById("membership").value;
-    let photoInput = document.getElementById("photo");
+let students = JSON.parse(localStorage.getItem("students")||"[]");
 
-    let reader = new FileReader();
-
-    reader.onload = function(e) {
-        let table = document.getElementById("tableData");
-
-        let row = `
-        <tr>
-            <td><img src="${e.target.result}"></td>
-            <td>${name}</td>
-            <td>${phone}</td>
-            <td>${sheet}</td>
-            <td class="${fees == 'Paid' ? 'paid' : 'unpaid'}">${fees}</td>
-            <td>${membership}</td>
-        </tr>
-        `;
-
-        table.innerHTML += row;
-    };
-
-    if(photoInput.files[0]) {
-        reader.readAsDataURL(photoInput.files[0]);
-    } else {
-        alert("Please upload photo");
-    }
+function save(){
+localStorage.setItem("students",JSON.stringify(students));
 }
+
+function calculateDays(start,days){
+let s=new Date(start);
+let exp=new Date(s);
+exp.setDate(s.getDate()+parseInt(days));
+let now=new Date();
+let diff=Math.ceil((exp-now)/(1000*60*60*24));
+return diff;
+}
+
+function render(){
+let html="";
+students.forEach((s,i)=>{
+let left=calculateDays(s.start,s.days);
+let cls=left<=3?"red":"green";
+
+html+=`
+<tr>
+<td><img src="${s.photo}"></td>
+<td>${s.name}</td>
+<td>${s.phone}</td>
+<td>${s.sheet}</td>
+<td>${s.fees}</td>
+<td>${s.start}</td>
+<td class="${cls}">${left>0?left+" Days":"Expired"}</td>
+<td><button onclick="del(${i})">Delete</button></td>
+</tr>`;
+});
+document.getElementById("data").innerHTML=html;
+}
+
+function addStudent(){
+let file=document.getElementById("photo").files[0];
+let reader=new FileReader();
+
+reader.onload=function(e){
+students.push({
+name:document.getElementById("name").value,
+phone:document.getElementById("phone").value,
+sheet:document.getElementById("sheet").value,
+fees:document.getElementById("fees").value,
+start:document.getElementById("startDate").value,
+days:document.getElementById("days").value,
+photo:e.target.result
+});
+save();
+render();
+};
+
+if(file) reader.readAsDataURL(file);
+else alert("Upload photo");
+}
+
+function del(i){
+students.splice(i,1);
+save();
+render();
+}
+
+render();
 </script>
 
 </body>
