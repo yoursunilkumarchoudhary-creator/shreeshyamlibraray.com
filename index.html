@@ -1,38 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Library Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="sidebar">
-        <h2>Admin</h2>
-        <ul>
-            <li>Dashboard</li>
-            <li>Users</li>
-            <li>Fees</li>
-            <li>Analytics</li>
-        </ul>
-    </div>
 
-    <div class="main">
-        <img src="logo.png" class="logo"/>
-        <h1>Admin Dashboard</h1>
+<h1 class="logo">Vidya Dadati Vinayam</h1>
+<h2>📚 Library Dashboard</h2>
 
-        <input type="text" placeholder="Search..." id="searchBox"/>
+<div class="form">
+  <input type="text" id="name" placeholder="Student Name">
+  <input type="text" id="contact" placeholder="Contact Number">
+  <input type="date" id="date">
+  <button type="button" onclick="addStudent()">Add</button>
+</div>
 
-        <div class="cards">
-            <div class="card">Total Users: 120</div>
-            <div class="card">Fees Collected: $5000</div>
-            <div class="card">Pending Fees: $1200</div>
-        </div>
+<h2>Aspirant List</h2>
 
-        <h2>Add User</h2>
-        <form>
-            <input type="text" placeholder="Name" required><br>
-            <input type="text" placeholder="Mobile Number" required><br>
-            <button type="submit">Add</button>
-        </form>
-    </div>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Contact</th>
+      <th>Join Date</th>
+      <th>Days Left</th>
+      <th>Status</th>
+      <th>Attendance</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
+
+<script src="script.js"></script>
 </body>
 </html>
