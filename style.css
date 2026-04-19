@@ -1,73 +1,26 @@
 body {
-  font-family: Arial;
-  background: linear-gradient(to right, #667eea, #764ba2);
-  color: white;
-  text-align: center;
+    display: flex;
+    font-family: Arial;
 }
-
+.sidebar {
+    width: 200px;
+    background: #333;
+    color: white;
+    height: 100vh;
+    padding: 20px;
+}
+.main {
+    flex: 1;
+    padding: 20px;
+}
 .logo {
-  margin-top: 20px;
-  font-size: 32px;
-  font-weight: bold;
+    width: 120px;
+    display: block;
+    margin: auto;
 }
-
-h2 {
-  margin-top: 10px;
-}
-
-.form {
-  margin: 20px;
-}
-
-input {
-  padding: 10px;
-  margin: 5px;
-  border-radius: 8px;
-  border: none;
-}
-
-button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 8px;
-  background: #00c9a7;
-  color: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #00a38a;
-}
-
-table {
-  width: 90%;
-  margin: auto;
-  background: white;
-  color: black;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-th {
-  background: #333;
-  color: white;
-  padding: 10px;
-}
-
-td {
-  padding: 10px;
-}
-
-.present {
-  background: green;
-  color: white;
-  padding: 5px;
-  border-radius: 5px;
-}
-
-.absent {
-  background: red;
-  color: white;
-  padding: 5px;
-  border-radius: 5px;
+.card {
+    background: #f4f4f4;
+    padding: 15px;
+    margin: 10px;
+    display: inline-block;
 }
