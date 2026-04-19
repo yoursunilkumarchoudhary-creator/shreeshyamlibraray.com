@@ -1,99 +1,158 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Library Admin</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<title>Library Members</title>
+<style>
+body {
+    font-family: Arial;
+    background: #f4f6f9;
+}
+
+header {
+    background: linear-gradient(to right, #3a7bd5, #3a6073);
+    color: white;
+    padding: 15px;
+    font-size: 24px;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+    margin-top: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+input, select {
+    padding: 8px;
+    margin: 5px;
+}
+
+button {
+    padding: 8px 15px;
+    background: #3a7bd5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th {
+    background: #3a7bd5;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.paid {
+    color: green;
+    font-weight: bold;
+}
+
+.unpaid {
+    color: red;
+    font-weight: bold;
+}
+
+img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+</style>
 </head>
-<body class="bg-gray-100 flex">
 
-<!-- Sidebar -->
-<div class="w-64 bg-gray-900 text-white p-5">
-    <h2 class="text-2xl font-bold mb-6">Library Admin</h2>
-    <ul class="space-y-4">
-        <li>Dashboard</li>
-        <li>Students</li>
-        <li>Fees</li>
-    </ul>
-</div>
+<body>
 
-<!-- Main -->
-<div class="flex-1 p-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Dashboard</h1>
-        <input id="search" type="text" placeholder="Search students..." class="border p-2 rounded">
-    </div>
+<header>📚 Library Members</header>
 
-    <!-- Cards -->
-    <div class="grid grid-cols-3 gap-4 mb-6">
-        <div class="bg-white p-4 rounded shadow">Total Students: <span id="total"></span></div>
-        <div class="bg-white p-4 rounded shadow">Fees Collected</div>
-        <div class="bg-white p-4 rounded shadow">Pending Fees</div>
-    </div>
+<div class="container">
 
-    <!-- Form -->
-    <div class="bg-white p-4 rounded shadow mb-6">
-        <h2 class="text-xl mb-3">Add Student</h2>
-        <input id="name" placeholder="Name" class="border p-2 m-1">
-        <input id="mobile" placeholder="Mobile No" class="border p-2 m-1">
-        <input id="seat" placeholder="Seat No" class="border p-2 m-1">
-        <input id="fees" placeholder="Fees" class="border p-2 m-1">
-        <select id="status" class="border p-2 m-1">
-            <option>Paid</option>
-            <option>Pending</option>
-        </select>
-        <button onclick="addStudent()" class="bg-blue-600 text-white px-4 py-2 rounded">Add</button>
-    </div>
+<h3>Add Student</h3>
 
-    <!-- Table -->
-    <table class="w-full bg-white rounded shadow">
-        <thead>
-            <tr class="bg-gray-200">
-                <th>Name</th>
-                <th>Mobile</th>
-                <th>Seat</th>
-                <th>Fees</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody id="table"></tbody>
-    </table>
+<input type="text" id="name" placeholder="Name">
+<input type="text" id="phone" placeholder="Phone Number">
+<input type="text" id="sheet" placeholder="Sheet No.">
+
+<select id="fees">
+<option value="Paid">Paid</option>
+<option value="Unpaid">Unpaid</option>
+</select>
+
+<select id="membership">
+<option value="Premium">Premium</option>
+<option value="Standard">Standard</option>
+</select>
+
+<input type="file" id="photo">
+
+<button onclick="addStudent()">Add</button>
+
+<table>
+<thead>
+<tr>
+<th>Photo</th>
+<th>Name</th>
+<th>Phone</th>
+<th>Sheet</th>
+<th>Fees</th>
+<th>Membership</th>
+</tr>
+</thead>
+
+<tbody id="tableData"></tbody>
+
+</table>
+
 </div>
 
 <script>
-let students = [];
+function addStudent() {
+    let name = document.getElementById("name").value;
+    let phone = document.getElementById("phone").value;
+    let sheet = document.getElementById("sheet").value;
+    let fees = document.getElementById("fees").value;
+    let membership = document.getElementById("membership").value;
+    let photoInput = document.getElementById("photo");
 
-function addStudent(){
-    let s = {
-        name: document.getElementById('name').value,
-        mobile: document.getElementById('mobile').value,
-        seat: document.getElementById('seat').value,
-        fees: document.getElementById('fees').value,
-        status: document.getElementById('status').value
+    let reader = new FileReader();
+
+    reader.onload = function(e) {
+        let table = document.getElementById("tableData");
+
+        let row = `
+        <tr>
+            <td><img src="${e.target.result}"></td>
+            <td>${name}</td>
+            <td>${phone}</td>
+            <td>${sheet}</td>
+            <td class="${fees == 'Paid' ? 'paid' : 'unpaid'}">${fees}</td>
+            <td>${membership}</td>
+        </tr>
+        `;
+
+        table.innerHTML += row;
     };
-    students.push(s);
-    render();
+
+    if(photoInput.files[0]) {
+        reader.readAsDataURL(photoInput.files[0]);
+    } else {
+        alert("Please upload photo");
+    }
 }
-
-function render(){
-    let table = document.getElementById('table');
-    let search = document.getElementById('search').value.toLowerCase();
-    table.innerHTML = "";
-    let filtered = students.filter(s => s.name.toLowerCase().includes(search));
-
-    filtered.forEach(s=>{
-        table.innerHTML += `<tr class="text-center">
-            <td>${s.name}</td>
-            <td>${s.mobile}</td>
-            <td>${s.seat}</td>
-            <td>${s.fees}</td>
-            <td>${s.status}</td>
-        </tr>`;
-    });
-
-    document.getElementById('total').innerText = students.length;
-}
-
-document.getElementById('search').addEventListener('input', render);
 </script>
 
 </body>
