@@ -1,39 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Library Dashboard</title>
-  <link rel="stylesheet" href="style.css">
+<title>Library Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 flex">
 
-<h1 class="logo">Vidya Dadati Vinayam</h1>
-<h2>📚 Library Dashboard</h2>
-
-<div class="form">
-  <input type="text" id="name" placeholder="Student Name">
-  <input type="text" id="contact" placeholder="Contact Number">
-  <input type="date" id="date">
-  <button type="button" onclick="addStudent()">Add</button>
+<!-- Sidebar -->
+<div class="w-64 bg-gray-900 text-white p-5">
+    <h2 class="text-2xl font-bold mb-6">Library Admin</h2>
+    <ul class="space-y-4">
+        <li>Dashboard</li>
+        <li>Students</li>
+        <li>Fees</li>
+    </ul>
 </div>
 
-<h2>Aspirant List</h2>
+<!-- Main -->
+<div class="flex-1 p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Dashboard</h1>
+        <input id="search" type="text" placeholder="Search students..." class="border p-2 rounded">
+    </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Contact</th>
-      <th>Join Date</th>
-      <th>Days Left</th>
-      <th>Status</th>
-      <th>Attendance</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody id="tableBody"></tbody>
-</table>
+    <!-- Cards -->
+    <div class="grid grid-cols-3 gap-4 mb-6">
+        <div class="bg-white p-4 rounded shadow">Total Students: <span id="total"></span></div>
+        <div class="bg-white p-4 rounded shadow">Fees Collected</div>
+        <div class="bg-white p-4 rounded shadow">Pending Fees</div>
+    </div>
 
-<script src="script.js"></script>
+    <!-- Form -->
+    <div class="bg-white p-4 rounded shadow mb-6">
+        <h2 class="text-xl mb-3">Add Student</h2>
+        <input id="name" placeholder="Name" class="border p-2 m-1">
+        <input id="mobile" placeholder="Mobile No" class="border p-2 m-1">
+        <input id="seat" placeholder="Seat No" class="border p-2 m-1">
+        <input id="fees" placeholder="Fees" class="border p-2 m-1">
+        <select id="status" class="border p-2 m-1">
+            <option>Paid</option>
+            <option>Pending</option>
+        </select>
+        <button onclick="addStudent()" class="bg-blue-600 text-white px-4 py-2 rounded">Add</button>
+    </div>
+
+    <!-- Table -->
+    <table class="w-full bg-white rounded shadow">
+        <thead>
+            <tr class="bg-gray-200">
+                <th>Name</th>
+                <th>Mobile</th>
+                <th>Seat</th>
+                <th>Fees</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="table"></tbody>
+    </table>
+</div>
+
+<script>
+let students = [];
+
+function addStudent(){
+    let s = {
+        name: document.getElementById('name').value,
+        mobile: document.getElementById('mobile').value,
+        seat: document.getElementById('seat').value,
+        fees: document.getElementById('fees').value,
+        status: document.getElementById('status').value
+    };
+    students.push(s);
+    render();
+}
+
+function render(){
+    let table = document.getElementById('table');
+    let search = document.getElementById('search').value.toLowerCase();
+    table.innerHTML = "";
+    let filtered = students.filter(s => s.name.toLowerCase().includes(search));
+
+    filtered.forEach(s=>{
+        table.innerHTML += `<tr class="text-center">
+            <td>${s.name}</td>
+            <td>${s.mobile}</td>
+            <td>${s.seat}</td>
+            <td>${s.fees}</td>
+            <td>${s.status}</td>
+        </tr>`;
+    });
+
+    document.getElementById('total').innerText = students.length;
+}
+
+document.getElementById('search').addEventListener('input', render);
+</script>
+
 </body>
 </html>
